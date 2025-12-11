@@ -1,0 +1,368 @@
+[gd_scene load_steps=7 format=3 uid="uid://ca41t36gukoeh"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_du2d7"]
+font_size = 30
+
+[sub_resource type="LabelSettings" id="LabelSettings_dpnb2"]
+font_size = 30
+
+[sub_resource type="LabelSettings" id="LabelSettings_75ypi"]
+font_size = 30
+
+[sub_resource type="LabelSettings" id="LabelSettings_ljwn0"]
+font_size = 30
+
+[sub_resource type="LabelSettings" id="LabelSettings_m0ivs"]
+font_size = 30
+
+[sub_resource type="LabelSettings" id="LabelSettings_ioqa6"]
+font_size = 30
+
+[node name="Hud" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.667
+anchor_bottom = 1.667
+offset_right = -0.3840332
+offset_bottom = -0.21606445
+
+[node name="Input List" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="List 0" type="HBoxContainer" parent="HBoxContainer/Input List"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/Input List/List 0"]
+layout_mode = 2
+text = "Frames: "
+label_settings = SubResource("LabelSettings_du2d7")
+
+[node name="frames" type="Label" parent="HBoxContainer/Input List/List 0"]
+layout_mode = 2
+text = "[-1]"
+label_settings = SubResource("LabelSettings_dpnb2")
+
+[node name="Label2" type="Label" parent="HBoxContainer/Input List/List 0"]
+layout_mode = 2
+text = "Direction: "
+label_settings = SubResource("LabelSettings_75ypi")
+
+[node name="direction" type="Label" parent="HBoxContainer/Input List/List 0"]
+layout_mode = 2
+text = "[-1]"
+label_settings = SubResource("LabelSettings_ljwn0")
+
+[node name="Label3" type="Label" parent="HBoxContainer/Input List/List 0"]
+layout_mode = 2
+text = "Buttons:"
+label_settings = SubResource("LabelSettings_m0ivs")
+
+[node name="buttons" type="Label" parent="HBoxContainer/Input List/List 0"]
+layout_mode = 2
+text = "[-1, -1, -1, -1, -1, -1]"
+label_settings = SubResource("LabelSettings_ioqa6")
+
+[node name="List 1" type="HBoxContainer" parent="HBoxContainer/Input List"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/Input List/List 1"]
+layout_mode = 2
+text = "Frames: "
+label_settings = SubResource("LabelSettings_du2d7")
+
+[node name="frames" type="Label" parent="HBoxContainer/Input List/List 1"]
+layout_mode = 2
+text = "[-1]"
+label_settings = SubResource("LabelSettings_dpnb2")
+
+[node name="Label2" type="Label" parent="HBoxContainer/Input List/List 1"]
+layout_mode = 2
+text = "Direction: "
+label_settings = SubResource("LabelSettings_75ypi")
+
+[node name="direction" type="Label" parent="HBoxContainer/Input List/List 1"]
+layout_mode = 2
+text = "[-1]"
+label_settings = SubResource("LabelSettings_ljwn0")
+
+[node name="Label3" type="Label" parent="HBoxContainer/Input List/List 1"]
+layout_mode = 2
+text = "Buttons:"
+label_settings = SubResource("LabelSettings_m0ivs")
+
+[node name="buttons" type="Label" parent="HBoxContainer/Input List/List 1"]
+layout_mode = 2
+text = "[-1, -1, -1, -1, -1, -1]"
+label_settings = SubResource("LabelSettings_ioqa6")
+
+[node name="List 2" type="HBoxContainer" parent="HBoxContainer/Input List"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/Input List/List 2"]
+layout_mode = 2
+text = "Frames: "
+label_settings = SubResource("LabelSettings_du2d7")
+
+[node name="frames" type="Label" parent="HBoxContainer/Input List/List 2"]
+layout_mode = 2
+text = "[-1]"
+label_settings = SubResource("LabelSettings_dpnb2")
+
+[node name="Label2" type="Label" parent="HBoxContainer/Input List/List 2"]
+layout_mode = 2
+text = "Direction: "
+label_settings = SubResource("LabelSettings_75ypi")
+
+[node name="direction" type="Label" parent="HBoxContainer/Input List/List 2"]
+layout_mode = 2
+text = "[-1]"
+label_settings = SubResource("LabelSettings_ljwn0")
+
+[node name="Label3" type="Label" parent="HBoxContainer/Input List/List 2"]
+layout_mode = 2
+text = "Buttons:"
+label_settings = SubResource("LabelSettings_m0ivs")
+
+[node name="buttons" type="Label" parent="HBoxContainer/Input List/List 2"]
+layout_mode = 2
+text = "[-1, -1, -1, -1, -1, -1]"
+label_settings = SubResource("LabelSettings_ioqa6")
+
+[node name="List 3" type="HBoxContainer" parent="HBoxContainer/Input List"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/Input List/List 3"]
+layout_mode = 2
+text = "Frames: "
+label_settings = SubResource("LabelSettings_du2d7")
+
+[node name="frames" type="Label" parent="HBoxContainer/Input List/List 3"]
+layout_mode = 2
+text = "[-1]"
+label_settings = SubResource("LabelSettings_dpnb2")
+
+[node name="Label2" type="Label" parent="HBoxContainer/Input List/List 3"]
+layout_mode = 2
+text = "Direction: "
+label_settings = SubResource("LabelSettings_75ypi")
+
+[node name="direction" type="Label" parent="HBoxContainer/Input List/List 3"]
+layout_mode = 2
+text = "[-1]"
+label_settings = SubResource("LabelSettings_ljwn0")
+
+[node name="Label3" type="Label" parent="HBoxContainer/Input List/List 3"]
+layout_mode = 2
+text = "Buttons:"
+label_settings = SubResource("LabelSettings_m0ivs")
+
+[node name="buttons" type="Label" parent="HBoxContainer/Input List/List 3"]
+layout_mode = 2
+text = "[-1, -1, -1, -1, -1, -1]"
+label_settings = SubResource("LabelSettings_ioqa6")
+
+[node name="List 4" type="HBoxContainer" parent="HBoxContainer/Input List"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/Input List/List 4"]
+layout_mode = 2
+text = "Frames: "
+label_settings = SubResource("LabelSettings_du2d7")
+
+[node name="frames" type="Label" parent="HBoxContainer/Input List/List 4"]
+layout_mode = 2
+text = "[-1]"
+label_settings = SubResource("LabelSettings_dpnb2")
+
+[node name="Label2" type="Label" parent="HBoxContainer/Input List/List 4"]
+layout_mode = 2
+text = "Direction: "
+label_settings = SubResource("LabelSettings_75ypi")
+
+[node name="direction" type="Label" parent="HBoxContainer/Input List/List 4"]
+layout_mode = 2
+text = "[-1]"
+label_settings = SubResource("LabelSettings_ljwn0")
+
+[node name="Label3" type="Label" parent="HBoxContainer/Input List/List 4"]
+layout_mode = 2
+text = "Buttons:"
+label_settings = SubResource("LabelSettings_m0ivs")
+
+[node name="buttons" type="Label" parent="HBoxContainer/Input List/List 4"]
+layout_mode = 2
+text = "[-1, -1, -1, -1, -1, -1]"
+label_settings = SubResource("LabelSettings_ioqa6")
+
+[node name="List 5" type="HBoxContainer" parent="HBoxContainer/Input List"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/Input List/List 5"]
+layout_mode = 2
+text = "Frames: "
+label_settings = SubResource("LabelSettings_du2d7")
+
+[node name="frames" type="Label" parent="HBoxContainer/Input List/List 5"]
+layout_mode = 2
+text = "[-1]"
+label_settings = SubResource("LabelSettings_dpnb2")
+
+[node name="Label2" type="Label" parent="HBoxContainer/Input List/List 5"]
+layout_mode = 2
+text = "Direction: "
+label_settings = SubResource("LabelSettings_75ypi")
+
+[node name="direction" type="Label" parent="HBoxContainer/Input List/List 5"]
+layout_mode = 2
+text = "[-1]"
+label_settings = SubResource("LabelSettings_ljwn0")
+
+[node name="Label3" type="Label" parent="HBoxContainer/Input List/List 5"]
+layout_mode = 2
+text = "Buttons:"
+label_settings = SubResource("LabelSettings_m0ivs")
+
+[node name="buttons" type="Label" parent="HBoxContainer/Input List/List 5"]
+layout_mode = 2
+text = "[-1, -1, -1, -1, -1, -1]"
+label_settings = SubResource("LabelSettings_ioqa6")
+
+[node name="List 6" type="HBoxContainer" parent="HBoxContainer/Input List"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/Input List/List 6"]
+layout_mode = 2
+text = "Frames: "
+label_settings = SubResource("LabelSettings_du2d7")
+
+[node name="frames" type="Label" parent="HBoxContainer/Input List/List 6"]
+layout_mode = 2
+text = "[-1]"
+label_settings = SubResource("LabelSettings_dpnb2")
+
+[node name="Label2" type="Label" parent="HBoxContainer/Input List/List 6"]
+layout_mode = 2
+text = "Direction: "
+label_settings = SubResource("LabelSettings_75ypi")
+
+[node name="direction" type="Label" parent="HBoxContainer/Input List/List 6"]
+layout_mode = 2
+text = "[-1]"
+label_settings = SubResource("LabelSettings_ljwn0")
+
+[node name="Label3" type="Label" parent="HBoxContainer/Input List/List 6"]
+layout_mode = 2
+text = "Buttons:"
+label_settings = SubResource("LabelSettings_m0ivs")
+
+[node name="buttons" type="Label" parent="HBoxContainer/Input List/List 6"]
+layout_mode = 2
+text = "[-1, -1, -1, -1, -1, -1]"
+label_settings = SubResource("LabelSettings_ioqa6")
+
+[node name="List 7" type="HBoxContainer" parent="HBoxContainer/Input List"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/Input List/List 7"]
+layout_mode = 2
+text = "Frames: "
+label_settings = SubResource("LabelSettings_du2d7")
+
+[node name="frames" type="Label" parent="HBoxContainer/Input List/List 7"]
+layout_mode = 2
+text = "[-1]"
+label_settings = SubResource("LabelSettings_dpnb2")
+
+[node name="Label2" type="Label" parent="HBoxContainer/Input List/List 7"]
+layout_mode = 2
+text = "Direction: "
+label_settings = SubResource("LabelSettings_75ypi")
+
+[node name="direction" type="Label" parent="HBoxContainer/Input List/List 7"]
+layout_mode = 2
+text = "[-1]"
+label_settings = SubResource("LabelSettings_ljwn0")
+
+[node name="Label3" type="Label" parent="HBoxContainer/Input List/List 7"]
+layout_mode = 2
+text = "Buttons:"
+label_settings = SubResource("LabelSettings_m0ivs")
+
+[node name="buttons" type="Label" parent="HBoxContainer/Input List/List 7"]
+layout_mode = 2
+text = "[-1, -1, -1, -1, -1, -1]"
+label_settings = SubResource("LabelSettings_ioqa6")
+
+[node name="List 8" type="HBoxContainer" parent="HBoxContainer/Input List"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/Input List/List 8"]
+layout_mode = 2
+text = "Frames: "
+label_settings = SubResource("LabelSettings_du2d7")
+
+[node name="frames" type="Label" parent="HBoxContainer/Input List/List 8"]
+layout_mode = 2
+text = "[-1]"
+label_settings = SubResource("LabelSettings_dpnb2")
+
+[node name="Label2" type="Label" parent="HBoxContainer/Input List/List 8"]
+layout_mode = 2
+text = "Direction: "
+label_settings = SubResource("LabelSettings_75ypi")
+
+[node name="direction" type="Label" parent="HBoxContainer/Input List/List 8"]
+layout_mode = 2
+text = "[-1]"
+label_settings = SubResource("LabelSettings_ljwn0")
+
+[node name="Label3" type="Label" parent="HBoxContainer/Input List/List 8"]
+layout_mode = 2
+text = "Buttons:"
+label_settings = SubResource("LabelSettings_m0ivs")
+
+[node name="buttons" type="Label" parent="HBoxContainer/Input List/List 8"]
+layout_mode = 2
+text = "[-1, -1, -1, -1, -1, -1]"
+label_settings = SubResource("LabelSettings_ioqa6")
+
+[node name="List 9" type="HBoxContainer" parent="HBoxContainer/Input List"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/Input List/List 9"]
+layout_mode = 2
+text = "Frames: "
+label_settings = SubResource("LabelSettings_du2d7")
+
+[node name="frames" type="Label" parent="HBoxContainer/Input List/List 9"]
+layout_mode = 2
+text = "[-1]"
+label_settings = SubResource("LabelSettings_dpnb2")
+
+[node name="Label2" type="Label" parent="HBoxContainer/Input List/List 9"]
+layout_mode = 2
+text = "Direction: "
+label_settings = SubResource("LabelSettings_75ypi")
+
+[node name="direction" type="Label" parent="HBoxContainer/Input List/List 9"]
+layout_mode = 2
+text = "[-1]"
+label_settings = SubResource("LabelSettings_ljwn0")
+
+[node name="Label3" type="Label" parent="HBoxContainer/Input List/List 9"]
+layout_mode = 2
+text = "Buttons:"
+label_settings = SubResource("LabelSettings_m0ivs")
+
+[node name="buttons" type="Label" parent="HBoxContainer/Input List/List 9"]
+layout_mode = 2
+text = "[-1, -1, -1, -1, -1, -1]"
+label_settings = SubResource("LabelSettings_ioqa6")

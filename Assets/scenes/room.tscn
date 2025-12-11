@@ -2,8 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://c0wk5m78ls2l0" path="res://Assets/scenes/guy.tscn" id="1_jj3rq"]
 [ext_resource type="Texture2D" uid="uid://b4s08hqf8cpwn" path="res://Assets/spritesheets/world_tileset.png" id="2_7jo7w"]
-
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_4265v"]
+[ext_resource type="PackedScene" uid="uid://ca41t36gukoeh" path="res://Assets/scenes/hud.tscn" id="2_p5nxv"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_p5nxv"]
 texture = ExtResource("2_7jo7w")
@@ -142,12 +141,19 @@ sources/0 = SubResource("TileSetAtlasSource_p5nxv")
 
 [node name="Room" type="Node2D"]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("WorldBoundaryShape2D_4265v")
-
 [node name="Guy" parent="." instance=ExtResource("1_jj3rq")]
 
 [node name="Camera2D" type="Camera2D" parent="Guy"]
+zoom = Vector2(2.91, 2.91)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="Guy/Camera2D"]
+
+[node name="Hud" parent="Guy/Camera2D/CanvasLayer" instance=ExtResource("2_p5nxv")]
+offset_left = -1.0
+offset_top = -1.0
+offset_right = -1.0
+offset_bottom = -1.0
+scale = Vector2(0.345, 0.345)
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 tile_map_data = PackedByteArray("AAD3/wIAAAAAAAAAAAD4/wIAAAAAAAAAAAD5/wIAAAAAAAAAAAD6/wIAAAAAAAAAAAD7/wIAAAAAAAAAAAD8/wIAAAAAAAAAAAD9/wIAAAAAAAAAAAD+/wIAAAAAAAAAAAD//wIAAAAAAAAAAAAAAAIAAAAAAAAAAAABAAIAAAAAAAAAAAACAAIAAAAAAAAAAAADAAIAAAAAAAAAAAAEAAIAAAAAAAAAAAAFAAIAAAAAAAAAAAAGAAIAAAAAAAAAAAAHAAIAAAAAAAAAAAAIAAIAAAAAAAAAAAAJAAIAAAAAAAAAAAAKAAIAAAAAAAAAAAALAAIAAAAAAAAAAAAMAAIAAAAAAAAAAAANAAIAAAAAAAAAAAAOAAIAAAAAAAAAAAAPAAIAAAAAAAAAAAAQAAIAAAAAAAAAAAD2/wIAAAAAAAAAAAD2/wEAAAAAAAAAAAD2/wAAAAAAAAAAAAD2////AAAAAAAAAAD2//7/AAAAAAAAAAD2//3/AAAAAAAAAAD2//z/AAAAAAAAAAD2//v/AAAAAAAAAAD2//r/AAAAAAAAAAD2//n/AAAAAAAAAAARAAIAAAAAAAAAAAASAAIAAAAAAAAAAAATAAIAAAAAAAAAAAAUAAIAAAAAAAAAAAAVAAIAAAAAAAAAAAAWAAIAAAAAAAAAAAAXAAIAAAAAAAAAAAAYAAIAAAAAAAAAAAAYAAEAAAAAAAAAAAAYAAAAAAAAAAAAAAAYAP//AAAAAAAAAAAYAP7/AAAAAAAAAAAYAP3/AAAAAAAAAAAYAPz/AAAAAAAAAAAYAPv/AAAAAAAAAAAYAPr/AAAAAAAAAAAYAPn/AAAAAAAAAAA=")
