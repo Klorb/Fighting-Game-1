@@ -15,6 +15,8 @@ var crouching: int = 0
 var attacking: bool = false
 var facing: bool = false #true == left && false == right
 var direction := 5.0
+var colliding := false
+var opposing := false
 
 var framesList: Array[int]
 var directionList: Array[float]
@@ -24,6 +26,7 @@ var buttonList = []
 
 @onready var sprite = $AnimatedSprite2D
 @onready var hud = $Camera2D/CanvasLayer/Hud
+@onready var hurtbox = $HurtBox/CollisionShape2D
 
 
 func _ready() -> void:
@@ -49,8 +52,27 @@ func _physics_process(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
+		
+	if crouching:
+		hurtbox.shape.size = Vector2(18, 35.5)
+		hurtbox.position = Vector2(0, 13.5)
+	elif jumping:
+		hurtbox.shape.size = Vector2(18, 47.5)
+		hurtbox.position = Vector2(0, 0)
+	else:
+		hurtbox.shape.size = Vector2(18, 55)
+		hurtbox.position = Vector2(0, 4)
+		
+	if colliding and not jumping:
+		if facing:
+			velocity.x += 37.5
+		else:
+			velocity.x -= 37.5
+		if opposing:
+			velocity.x = 0
 	
 
+	
 	move_and_slide()
 	
 func _process(_delta: float) -> void:
@@ -88,6 +110,8 @@ func _process(_delta: float) -> void:
 		else:
 			if sprite.animation != "fall":
 				sprite.play("fall")
+				
+	
 		
 			
 	
@@ -126,12 +150,12 @@ func fill_list() -> void:
 				break
 	if same:
 		framesList[0] += 1
-		hud.updateListFrame()
+		#hud.updateListFrame()
 	else:
 		buttonList.push_front(newButtons)
 		framesList.push_front(1)
 		directionList.push_front(direction)
-		hud.updateListInput(direction, newButtons)
+		#hud.updateListInput(direction, newButtons)
 	
 	#for i in 10:
 		#var printString = "" 
@@ -191,6 +215,8 @@ func handle_input() -> void:
 				velocity.y = JUMP_VELOCITY
 		else:
 			velocity.x = move_toward(velocity.x, 0, SPEED)
+	
+	
 	
 	
 func handle_attacks() -> void:
@@ -270,6 +296,8 @@ func handle_attacks() -> void:
 							print("light dp")
 				_:
 					if buttonList[0][0]: #punch
+						attacking = true
+						sprite.play("lp")
 						print("light punch")
 					elif buttonList[0][1]: #punch
 						print("medium punch")
@@ -325,7 +353,9 @@ func check_list() -> int:
 	return 0
 
 
-
+func flip() -> void:
+	facing = !facing
+	sprite.flip_h = facing
 
 
 
@@ -339,4 +369,21 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 	
 		
 	if attacking:
+		print("not attacking anymore")
 		attacking = false
+		
+
+
+func _on_hurt_box_area_entered(area: Area2D) -> void:
+	if area.is_in_group("player2"):
+		colliding = true
+		#if facing:
+			#velocity.x -= 70
+		#else:
+			#velocity.x += 70
+
+
+func _on_hurt_box_area_exited(area: Area2D) -> void:
+	if area.is_in_group("player2"):
+		colliding = false
+		

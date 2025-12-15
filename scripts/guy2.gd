@@ -15,6 +15,8 @@ var crouching: int = 0
 var attacking: bool = false
 var facing: bool = false #true == left && false == right
 var direction := 5.0
+var colliding := false
+var opposing := false
 
 var framesList: Array[int]
 var directionList: Array[float]
@@ -33,6 +35,8 @@ func _ready() -> void:
 		framesList.append(-1)
 		for j in 6:
 			buttonList[i].append(0)
+			
+	flip()
 
 
 func _physics_process(delta: float) -> void:
@@ -49,6 +53,15 @@ func _physics_process(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
+		
+	if colliding and not jumping:
+		if facing:
+			velocity.x += 37.5
+		else:
+			velocity.x -= 37.5
+		if opposing:
+			velocity.x = 0
+			
 	
 
 	move_and_slide()
@@ -126,12 +139,12 @@ func fill_list() -> void:
 				break
 	if same:
 		framesList[0] += 1
-		hud.updateListFrame()
+		#hud.updateListFrame()
 	else:
 		buttonList.push_front(newButtons)
 		framesList.push_front(1)
 		directionList.push_front(direction)
-		hud.updateListInput(direction, newButtons)
+		#hud.updateListInput(direction, newButtons)
 	
 	#for i in 10:
 		#var printString = "" 
@@ -324,7 +337,9 @@ func check_list() -> int:
 		
 	return 0
 
-
+func flip() -> void:
+	facing = !facing
+	sprite.flip_h = facing
 
 
 
@@ -340,3 +355,18 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 		
 	if attacking:
 		attacking = false
+		
+
+
+func _on_hurt_box_area_entered(area: Area2D) -> void:
+	if area.is_in_group("player1"):
+		colliding = true
+		#if facing:
+			#global_position.x += 1
+		#else:
+			#global_position.x -= 1
+
+
+func _on_hurt_box_area_exited(area: Area2D) -> void:
+	if area.is_in_group("player1"):
+		colliding = false
