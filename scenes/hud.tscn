@@ -1,4 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://ca41t36gukoeh"]
+[gd_scene load_steps=8 format=3 uid="uid://ca41t36gukoeh"]
+
+[ext_resource type="Script" uid="uid://di7m80bgqoia5" path="res://scripts/hud.gd" id="1_dpnb2"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_du2d7"]
 font_size = 30
@@ -25,6 +27,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_dpnb2")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
