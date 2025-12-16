@@ -6,12 +6,19 @@ var viewportRect := Rect2()
 var cameraRect := Rect2()
 var p1lhs := true
 
+var attack1: Attack
+var attack2: Attack
+
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	viewportRect = get_viewport_rect()
 	set_process(get_child_count() > 0)
+	
+	for i in 2:
+		get_child(i).player = i + 1
+	
 	
 func _physics_process(_delta: float) -> void:
 	if get_child(0).colliding and get_child(1).colliding:
@@ -60,13 +67,13 @@ func calculateZoom(camRect: Rect2, viewSize: Vector2) -> Vector2:
 		max(3.5, camRect.size.x / viewSize.x + zoomOffset),
 		max(3.5, camRect.size.y / viewSize.y + zoomOffset))
 	
-	
-	
-	
-	
-	
 	return Vector2(maxZoom, maxZoom)
 	
+func receiveAttack(_attack: Attack, from: int):
+	if from == 1:
+		attack1 = _attack
+	else:
+		attack2 = _attack
 
 
 

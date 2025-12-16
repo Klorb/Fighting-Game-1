@@ -1,8 +1,11 @@
 extends CharacterBody2D
 
 
-const SPEED = 75.0
+
+const SPEED = 55.0
 const JUMP_VELOCITY = -400.0
+
+@export var player := 0
 
 
 
@@ -17,19 +20,29 @@ var facing: bool = false #true == left && false == right
 var direction := 5.0
 var colliding := false
 var opposing := false
+var hitstun := false
+
+var currentAttack:= Attack.new("", 0, 0, 0, 0, [0, 0, 0, 0], [0, 0, 0, 0], [0, 0])
+var attackTimer := 0
+var hitboxStage := 0
 
 var framesList: Array[int]
 var directionList: Array[float]
 var buttonList = []
+
+var attacks = GuyAttacks.new()
 
 
 
 @onready var sprite = $AnimatedSprite2D
 @onready var hud = $Camera2D/CanvasLayer/Hud
 @onready var hurtbox = $HurtBox/CollisionShape2D
+@onready var hitbox = $Hitbox/CollisionShape2D2
+@onready var hitboxArea = $Hitbox
 
 
 func _ready() -> void:
+	hitbox.disabled = true
 	for i in 10:
 		buttonList.append([])
 		directionList.append(-1)
@@ -70,6 +83,24 @@ func _physics_process(delta: float) -> void:
 			velocity.x -= 37.5
 		if opposing:
 			velocity.x = 0
+			
+	if attackTimer != 0: #attacking
+		print("attackTimer")
+		if attackTimer <= currentAttack.getTotalFrames():
+			print(str(attackTimer))
+			if attackTimer == currentAttack.getFramesAt(hitboxStage):
+				if currentAttack.getHitboxSizeAt(hitboxStage * 2) == 0:
+					hitbox.disabled = true
+				else:
+					hitbox.disabled = false
+					hitbox.shape.size = Vector2(currentAttack.getHitboxSizeAt(hitboxStage * 2), currentAttack.getHitboxSizeAt((hitboxStage * 2) + 1 ))
+					hitboxArea.position = Vector2(currentAttack.getHitboxPositionAt(hitboxStage * 2), currentAttack.getHitboxPositionAt((hitboxStage * 2) + 1))
+				hitboxStage += 1
+			attackTimer += 1
+		else:
+			attacking = false
+			attackTimer = 0
+		
 	
 
 	
@@ -100,6 +131,9 @@ func _process(_delta: float) -> void:
 			elif crouching == 3:
 				if sprite.animation != ("crouch idle"):
 					sprite.play("crouch idle")
+	elif attacking:
+		if(sprite.animation != currentAttack.getName()):
+			sprite.play(currentAttack.getName())
 					
 				
 			
@@ -296,8 +330,9 @@ func handle_attacks() -> void:
 							print("light dp")
 				_:
 					if buttonList[0][0]: #punch
+						print("attack start")
 						attacking = true
-						sprite.play("lp")
+						sendAttack(attacks.lp)
 						print("light punch")
 					elif buttonList[0][1]: #punch
 						print("medium punch")
@@ -368,15 +403,25 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 		crouching = 0
 	
 		
-	if attacking:
-		print("not attacking anymore")
-		attacking = false
 		
 
+
+func sendAttack(attack: Attack) -> void:
+	print("attack sent to main, starting timer")
+	get_parent().receiveAttack(attack, player)
+	currentAttack = attack
+	attackTimer = 1
+	hitboxStage  = 0
+	
+	
+	
+	
 
 func _on_hurt_box_area_entered(area: Area2D) -> void:
 	if area.is_in_group("player2"):
 		colliding = true
+	if area.is_in_group("player2hitbox"):
+		hitstun = true
 		#if facing:
 			#velocity.x -= 70
 		#else:
