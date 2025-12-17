@@ -4,7 +4,7 @@ extends CharacterBody2D
 const SPEED = 75.0
 const JUMP_VELOCITY = -400.0
 
-
+@export var player := 0
 
 
 var vertical: float = 0.0
