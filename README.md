@@ -1,16 +1,45 @@
 # READ ME
 
+## Running the project
+### Just trying to play
+ ***WINDOWS ONLY SO FAR*** \
+Download "The Game Files.zip" from the releases page and extract. Run "fighting game.exe," once the window pops up with an error, click "Read more," then "Run anyway" and enjoy!
+
+### Using source code
+Download Godot 4 from this Link:
+To run the program, you simply download the source code, run Godot, use import to find the main folder to put that into Godot, then just hit the small play button in the top right and it should run.
 
 
-### Running the project
+**Note:** Unfortunately, there is no sort of menu implemented yet, so you must close the window to end the program.
+
+## Controls
+
+### Player1 (spawned on the left)
+Movement: wasd
+
+Punches
+- Light: u
+- Medium: i
+- Heavy: o
+
+  
+Kicks
+- Light: j
+- Medium: k
+- Heavy: l
 
 
-Currently, just downloading the project won't run it. You must have
-a version of Godot 4 downloaded. Link: https://godotengine.org/
+### Player2 (spawned on the right
+Movement: tfgh
 
-To run it, you simply download the source code, use import to find
-the main folder and put that into Godot, and hit the small play
-button in the top right. 
+Punches
+- Light: p
+- Medium: [
+- Heavy: ]
 
-Unfortunately, there is no sort of menu implemented yet, so you
-must close the window to end the program.
+
+Kicks
+- Light: ;
+- Medium: '
+- Heavy: Enter
+
