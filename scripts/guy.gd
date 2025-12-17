@@ -1,11 +1,13 @@
 extends CharacterBody2D
 
+#class_name Guy
+
 
 
 const SPEED = 55.0
 const JUMP_VELOCITY = -400.0
 
-@export var player := 0
+@export var player: int
 
 
 
@@ -20,7 +22,8 @@ var facing: bool = false #true == left && false == right
 var direction := 5.0
 var colliding := false
 var opposing := false
-var hitstun := false
+
+var hitstunTimer := 0
 
 var currentAttack:= Attack.new("", 0, 0, 0, 0, [0, 0, 0, 0], [0, 0, 0, 0], [0, 0])
 var attackTimer := 0
@@ -31,17 +34,23 @@ var directionList: Array[float]
 var buttonList = []
 
 var attacks = GuyAttacks.new()
+var inputMap: DirectionsResource
 
 
 
 @onready var sprite = $AnimatedSprite2D
-@onready var hud = $Camera2D/CanvasLayer/Hud
+#@onready var hud = $Camera2D/CanvasLayer/Hud
 @onready var hurtbox = $HurtBox/CollisionShape2D
 @onready var hitbox = $Hitbox/CollisionShape2D2
 @onready var hitboxArea = $Hitbox
 
 
+func _enter_tree() -> void:
+	print("Entering Tree")
+
+
 func _ready() -> void:
+	print("readying")
 	hitbox.disabled = true
 	for i in 10:
 		buttonList.append([])
@@ -49,13 +58,21 @@ func _ready() -> void:
 		framesList.append(-1)
 		for j in 6:
 			buttonList[i].append(0)
+	
+	
+	get_parent().playersReady += 1
+	print("player ", get_parent().playersReady, " ready")
+	set_physics_process(false)
+	set_process(false)
+	
+	
 
 
 func _physics_process(delta: float) -> void:
 	
 	#handle gameplay input
-	vertical = Input.get_axis("Down", "Up")
-	horizontal = Input.get_axis("Left", "Right")
+	vertical = Input.get_axis(inputMap.down, inputMap.up)
+	horizontal = Input.get_axis(inputMap.left, inputMap.right)
 	
 	fill_list()
 	handle_input()
@@ -67,39 +84,50 @@ func _physics_process(delta: float) -> void:
 		velocity += get_gravity() * delta
 		
 	if crouching:
+		print("crouch hitbox " + str(player))
 		hurtbox.shape.size = Vector2(18, 35.5)
 		hurtbox.position = Vector2(0, 13.5)
 	elif jumping:
+		print("jumping hitbox " + str(player))
 		hurtbox.shape.size = Vector2(18, 47.5)
 		hurtbox.position = Vector2(0, 0)
 	else:
+		print("standing hitbox " + str(player))
 		hurtbox.shape.size = Vector2(18, 55)
 		hurtbox.position = Vector2(0, 4)
 		
-	if colliding and not jumping:
-		if facing:
-			velocity.x += 37.5
-		else:
-			velocity.x -= 37.5
-		if opposing:
-			velocity.x = 0
+	if hitstunTimer == 0:
+		if colliding and not jumping:
+			if facing:
+				velocity.x += 37.5
+			else:
+				velocity.x -= 37.5
+			if opposing:
+				velocity.x = 0
+				
+		if attackTimer != 0: #attacking
+			#print("attackTimer")
+			if attackTimer <= currentAttack.getTotalFrames():
+				#print(str(attackTimer))
+				if attackTimer == currentAttack.getFramesAt(hitboxStage):
+					#print("advancing in hitbox stage")
+					if currentAttack.getHitboxSizeAt(hitboxStage * 2) == 0:
+						hitbox.disabled = true
+					else:
+						hitbox.disabled = false
+						hitbox.shape.size = Vector2(currentAttack.getHitboxSizeAt(hitboxStage * 2), currentAttack.getHitboxSizeAt((hitboxStage * 2) + 1 ))
+						if !facing:
+							hitboxArea.position = Vector2(currentAttack.getHitboxPositionAt(hitboxStage * 2), currentAttack.getHitboxPositionAt((hitboxStage * 2) + 1))
+						else:
+							hitboxArea.position = Vector2(-currentAttack.getHitboxPositionAt(hitboxStage * 2), currentAttack.getHitboxPositionAt((hitboxStage * 2) + 1))
+					hitboxStage += 1
+				attackTimer += 1
+			else:
+				attacking = false
+				attackTimer = 0
 			
-	if attackTimer != 0: #attacking
-		print("attackTimer")
-		if attackTimer <= currentAttack.getTotalFrames():
-			print(str(attackTimer))
-			if attackTimer == currentAttack.getFramesAt(hitboxStage):
-				if currentAttack.getHitboxSizeAt(hitboxStage * 2) == 0:
-					hitbox.disabled = true
-				else:
-					hitbox.disabled = false
-					hitbox.shape.size = Vector2(currentAttack.getHitboxSizeAt(hitboxStage * 2), currentAttack.getHitboxSizeAt((hitboxStage * 2) + 1 ))
-					hitboxArea.position = Vector2(currentAttack.getHitboxPositionAt(hitboxStage * 2), currentAttack.getHitboxPositionAt((hitboxStage * 2) + 1))
-				hitboxStage += 1
-			attackTimer += 1
-		else:
-			attacking = false
-			attackTimer = 0
+	else:
+		hitstunTimer -= 1
 		
 	
 
@@ -107,45 +135,49 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	
 func _process(_delta: float) -> void:
-	if not attacking and not jumping:
-		if crouching == 0:
-			if horizontal < 0:
-				if facing:
-					sprite.play("walk")
+	if hitstunTimer == 0:
+		if not attacking and not jumping:
+			if crouching == 0:
+				if horizontal < 0:
+					if facing:
+						sprite.play("walk")
+					else:
+						sprite.play_backwards("walk")
+				elif horizontal > 0:
+					if facing:
+						sprite.play_backwards("walk")
+					else:
+						sprite.play("walk")
 				else:
-					sprite.play_backwards("walk")
-			elif horizontal > 0:
-				if facing:
-					sprite.play_backwards("walk")
-				else:
-					sprite.play("walk")
-			else:
-				sprite.play("stand")
-		elif crouching == 4:
-			sprite.play("crouch up")
-			
-		if direction < 4.0:
-			if crouching == 1:
-				crouching = 2
-				sprite.play("crouch down")
-			elif crouching == 3:
-				if sprite.animation != ("crouch idle"):
-					sprite.play("crouch idle")
-	elif attacking:
-		if(sprite.animation != currentAttack.getName()):
-			sprite.play(currentAttack.getName())
+					sprite.play("stand")
+			elif crouching == 4:
+				crouching = 0
+				sprite.play("crouch up")
+				
+			if direction < 4.0:
+				if crouching == 1:
+					crouching = 2
+					sprite.play("crouch down")
+				elif crouching == 3:
+					if sprite.animation != ("crouch idle"):
+						sprite.play("crouch idle")
+		elif attacking:
+			if(sprite.animation != currentAttack.getName()):
+				sprite.play(currentAttack.getName())
+	
 					
 				
 			
-	if not attacking and jumping:
-		if velocity.y < 0:
-			if sprite.animation != "jump":
-				sprite.play("jump")
-		else:
-			if sprite.animation != "fall":
-				sprite.play("fall")
+		if not attacking and jumping:
+			if velocity.y < 0:
+				if sprite.animation != "jump":
+					sprite.play("jump")
+			else:
+				if sprite.animation != "fall":
+					sprite.play("fall")
 				
-	
+	else:
+		sprite.play("m_m_hurt")
 		
 			
 	
@@ -162,17 +194,17 @@ func fill_list() -> void:
 		direction += 1 * horizontal
 	
 	var newButtons: Array[int] = [0, 0, 0, 0, 0, 0]
-	if Input.is_action_pressed("LP"):
+	if Input.is_action_pressed(inputMap.lp):
 		newButtons[0] = 1
-	if Input.is_action_pressed("MP"):
+	if Input.is_action_pressed(inputMap.mp):
 		newButtons[1] = 1
-	if Input.is_action_pressed("HP"):
+	if Input.is_action_pressed(inputMap.hp):
 		newButtons[2] = 1
-	if Input.is_action_pressed("LK"):
+	if Input.is_action_pressed(inputMap.lk):
 		newButtons[3] = 1
-	if Input.is_action_pressed("MK"):
+	if Input.is_action_pressed(inputMap.mk):
 		newButtons[4] = 1
-	if Input.is_action_pressed("HK"):
+	if Input.is_action_pressed(inputMap.hk):
 		newButtons[5] = 1
 		
 	if direction != directionList[0]:
@@ -227,13 +259,13 @@ func handle_input() -> void:
 			for j in 6:
 				printString += str(buttonList[i][j])
 				
-			print(printString)
+			#print(printString)
 	
 	#move
 	if not attacking && not jumping:
 		if direction < 4.0:
 			if crouching == 0:
-				print("start crouching")
+				#print("start crouching")
 				crouching = 1
 		elif crouching == 3:
 			crouching = 4
@@ -244,7 +276,7 @@ func handle_input() -> void:
 				velocity.x = move_toward(velocity.x, 0, SPEED)
 				
 			if (7.0 <= direction && direction <= 9.0): 
-				print("jumping")
+				#print("jumping")
 				jumping = true
 				velocity.y = JUMP_VELOCITY
 		else:
@@ -255,13 +287,16 @@ func handle_input() -> void:
 	
 func handle_attacks() -> void:
 	if not jumping && not attacking:
-		if (Input.is_action_just_pressed("LP") || Input.is_action_just_pressed("MP") || Input.is_action_just_pressed("HP") || 
-		Input.is_action_just_pressed("LK") || Input.is_action_just_pressed("MK") || Input.is_action_just_pressed("HK")):
+		if (Input.is_action_just_pressed(inputMap.lp) || Input.is_action_just_pressed(inputMap.mp) || Input.is_action_just_pressed(inputMap.hp) || 
+		Input.is_action_just_pressed(inputMap.lk) || Input.is_action_just_pressed(inputMap.mk) || Input.is_action_just_pressed(inputMap.hk)):
 			match check_list():
 				1:
 					if buttonList[0][0]: #punch
 						if facing:
 							print("light hado")
+							print("attack start")
+							attacking = true
+							sendAttack(attacks.l_hado)
 						else:
 							print("light firehands")
 					elif buttonList[0][1]: #punch
@@ -293,6 +328,9 @@ func handle_attacks() -> void:
 					if buttonList[0][0]: #punch
 						if !facing:
 							print("light hado")
+							print("attack start")
+							attacking = true
+							sendAttack(attacks.lp)
 						else:
 							print("light firehands")
 					elif buttonList[0][1]: #punch
@@ -344,7 +382,8 @@ func handle_attacks() -> void:
 						print("medium kick")
 					elif buttonList[0][5]: #kick
 						print("heavy kick")
-					print("no input")
+					else:
+						print("no input")
 			#attacking = true
 			velocity.x = move_toward(velocity.x, 0, SPEED)
 			
@@ -399,8 +438,9 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 	if crouching == 2:
 		print("crouching idle should play")
 		crouching = 3
-	if crouching == 4:
-		crouching = 0
+	if sprite.animation == "crouch up":
+		sprite.play("stand")
+	
 	
 		
 		
@@ -418,17 +458,62 @@ func sendAttack(attack: Attack) -> void:
 	
 
 func _on_hurt_box_area_entered(area: Area2D) -> void:
-	if area.is_in_group("player2"):
+	if area.is_in_group("player2") and player == 1:
 		colliding = true
-	if area.is_in_group("player2hitbox"):
-		hitstun = true
+	elif area.is_in_group("player1") and player == 2:
+		colliding = true
+	if area.is_in_group("player2hitbox") and player == 1:
+		match get_parent().attack2.getWeight:
+			1:
+				hitstunTimer = 10
+			2:
+				hitstunTimer = 20
+			3:
+				hitstunTimer = 30
+			4: 
+				hitstunTimer = 40
+			
+		attacking = false
+		attackTimer = 0
+		velocity.x = 0
+	elif area.is_in_group("player1hitbox") and player == 2:
+		match get_parent().attack1.getWeight:
+			1:
+				hitstunTimer = 10
+			2:
+				hitstunTimer = 20
+			3:
+				hitstunTimer = 30
+			4: 
+				hitstunTimer = 40
+			
+		attacking = false
+		attackTimer = 0
+		velocity.x = 0
 		#if facing:
 			#velocity.x -= 70
 		#else:
 			#velocity.x += 70
 
 
+func doTheThing(numbah: int):
+	player = numbah
+	inputMap = DirectionsResource.new(player)
+	hitbox.add_to_group("player" + str(player) + "hitbox")
+	hurtbox.add_to_group("player" + str(player))
+	
+	if player > 1:
+		flip()
+	
+	set_physics_process(true)
+	set_process(true)
+
 func _on_hurt_box_area_exited(area: Area2D) -> void:
-	if area.is_in_group("player2"):
+	if area.is_in_group("player2") and player == 1:
 		colliding = false
+	elif area.is_in_group("player1") and player == 2:
+		colliding = true
 		
+		
+#func _init(numbah: int):
+	#player = numbah
